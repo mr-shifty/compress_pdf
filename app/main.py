@@ -1,5 +1,7 @@
+import os
 import customtkinter as CTk
 from pdf_compressor import compress
+from tkinter import messagebox
 
 
 class App(CTk.CTk):
@@ -24,7 +26,7 @@ class App(CTk.CTk):
             pady=(20, 20),
             sticky="nsew"
         )
-        # Окно ввода пароля
+        # Окно ввода пути файла
         self.entry_file = CTk.CTkEntry(
             master=self.file_frame,
             width=400
@@ -79,10 +81,11 @@ class App(CTk.CTk):
             '<ButtonRelease-1>',
             self.update_compression_force_label
         )
-
+        # Лейбл силы сжатия
         self.compression_force_label = CTk.CTkLabel(
             self,
-            text='Сила сжатия:\n\nПо умолчанию'
+            text='Сила сжатия:\n\nСтандартная',
+            font=("Arial", 20, "bold")
         )
         self.compression_force_label.grid(
             row=3,
@@ -115,31 +118,67 @@ class App(CTk.CTk):
         self.entry_file.insert(0, filename)
         self.entry_file.configure(state='readonly')
 
+    def get_compression_force_name(self):
+        """Добавляет название для лейбла."""
+
+        force = self.compression_force_slider.get()
+        if force == 0:
+            return "стандартная"
+        elif force == 1:
+            return "допечатная"
+        elif force == 2:
+            return "печать"
+        elif force == 3:
+            return "на_почту"
+        elif force == 4:
+            return "максимальное_сжатие"
+
     def update_compression_force_label(self, event):
         """Функция обновления значений слайдера."""
 
         compression_force = int(self.compression_force_slider.get())
         if compression_force == 0:
             self.compression_force_label.configure(
-                text='Сила сжатия:\n\nПо умолчанию')
+                text='Сила сжатия:\n\nСтандартная')
 
         elif compression_force == 1:
             self.compression_force_label.configure(
-                text='Сила сжатия:\n\nДопечатная подготовка')
+                text='Сила сжатия:\n\nДопечатная')
         elif compression_force == 2:
             self.compression_force_label.configure(
                 text='Сила сжатия:\n\nПечать')
         elif compression_force == 3:
             self.compression_force_label.configure(
-                text='Сила сжатия:\n\nОтправка по почте')
+                text='Сила сжатия:\n\nНа почту')
         elif compression_force == 4:
             self.compression_force_label.configure(
                 text='Сила сжатия:\n\nМаксимальное сжатие')
 
     def compress_file(self):
-        compress('pdf/test.pdf',
-                 'pdf/compressed_test.pdf',
-                 power=int(self.compression_force_slider.get()))
+        """Функция сжатия файла."""
+
+        input_file = str(self.entry_file.get())
+
+        if not input_file:
+            messagebox.showerror("Ошибка", "Выберите файл для сжатия.")
+            return
+
+        file_name, file_extension = os.path.splitext(input_file)
+        output_file = "{}_{}_{}{}".format(
+            file_name, "сжатый",
+            self.get_compression_force_name(),
+            file_extension
+        )
+
+        try:
+            compress(input_file,
+                     output_file,
+                     power=int(self.compression_force_slider.get()))
+            messagebox.showinfo("Успех", "Файл успешно сжат.")
+        except Exception as e:
+            messagebox.showerror(
+                "Ошибка", f"Произошла ошибка при сжатии файла: {str(e)}"
+            )
 
 
 def main():
