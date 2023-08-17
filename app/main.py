@@ -1,11 +1,12 @@
 import io
-import sys
-import os
-import customtkinter as CTk
-from pdf_compressor import compress
-from tkinter import messagebox
 import logging
 import mimetypes
+import os
+import sys
+from tkinter import messagebox
+
+import customtkinter as CTk
+from pdf_compressor import compress
 
 
 class App(CTk.CTk):
@@ -121,12 +122,19 @@ class App(CTk.CTk):
 
     def browse_file(self):
         """Функция выбора файла."""
-
         filename = CTk.filedialog.askopenfilename()
-        self.entry_file.configure(state='normal')
-        self.entry_file.delete(0, 'end')
-        self.entry_file.insert(0, filename)
-        self.entry_file.configure(state='readonly')
+
+        if filename:
+            mime_type, _ = mimetypes.guess_type(filename)
+            if mime_type != 'application/pdf':
+                messagebox.showerror(
+                    "Ошибка", "Выбранный файл не является PDF.")
+                return
+
+            self.entry_file.configure(state='normal')
+            self.entry_file.delete(0, 'end')
+            self.entry_file.insert(0, filename)
+            self.entry_file.configure(state='readonly')
 
     def get_compression_force_name(self):
         """Добавляет название для лейбла."""
@@ -163,21 +171,6 @@ class App(CTk.CTk):
         elif compression_force == 4:
             self.compression_force_label.configure(
                 text='Сила сжатия:\n\nМаксимальное сжатие')
-
-    def browse_file(self):
-        """Функция выбора файла."""
-        filename = CTk.filedialog.askopenfilename()
-
-        if filename:
-            mime_type, _ = mimetypes.guess_type(filename)
-            if mime_type != 'application/pdf':
-                messagebox.showerror("Ошибка", "Выбранный файл не является PDF.")
-                return
-
-            self.entry_file.configure(state='normal')
-            self.entry_file.delete(0, 'end')
-            self.entry_file.insert(0, filename)
-            self.entry_file.configure(state='readonly')
 
     def compress_file(self):
         """Функция сжатия файла."""
@@ -225,17 +218,20 @@ class App(CTk.CTk):
 
             # Получаем вывод консоли в виде строки
             console_output_str = console_output.getvalue()
-            
+
             # Возвращаем вывод консоли в стандартное состояние
             sys.stdout = sys.__stdout__
 
             # Показываем messagebox и добавляем вывод консоли в него
-            messagebox.showinfo("Успех", f"Файл успешно сжат.\n\nИтого:\n{console_output_str}")
+            messagebox.showinfo(
+                "Успех", f"Файл успешно сжат.\n\nИтого:\n{console_output_str}")
         except Exception as e:
             # То же самое для случая ошибки
             console_output_str = console_output.getvalue()
             sys.stdout = sys.__stdout__
-            messagebox.showerror("Ошибка", f"Произошла ошибка при сжатии файла: {str(e)}\n\nВывод консоли:\n{console_output_str}")
+            messagebox.showerror(
+                "Ошибка", f"Произошла ошибка при сжатии файла: {str(e)}\n"
+                f"\nВывод консоли:\n{console_output_str}")
             logging.error(f"Ошибка при сжатии файла: {str(e)}", exc_info=True)
 
 
