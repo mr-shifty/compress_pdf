@@ -3,8 +3,8 @@ import logging
 import mimetypes
 import os
 import sys
+import tkinter
 from tkinter import messagebox
-import time
 
 import customtkinter as CTk
 from pdf_compressor import compress
@@ -55,7 +55,8 @@ class App(CTk.CTk):
             pady=(40, 20)
         )
 
-        # слайдер силы сжатия
+        # Radiobutton силы сжатия
+        self.radio_var = tkinter.IntVar(value=0)
         self.settings_frame = CTk.CTkFrame(
             master=self,
             fg_color="transparent"
@@ -67,39 +68,60 @@ class App(CTk.CTk):
             pady=20,
             sticky="nsew",
         )
-        self.compression_force_slider = CTk.CTkSlider(
+        self.rb_force_0 = CTk.CTkRadioButton(
             master=self.settings_frame,
-            from_=0,
-            to=4,
-            number_of_steps=4,
-            width=500
+            variable=self.radio_var,
+            value=0,
+            text='Стандартная'
         )
-        self.compression_force_slider.grid(
-            row=1,
-            column=0,
-            columnspan=3,
+        self.rb_force_0.grid(
+            row=0,
+            column=1,
             padx=(20, 20),
-            pady=(20, 20),
-            sticky='ew'
-        )
-        self.compression_force_slider.set(0)
-        self.compression_force_slider.bind(
-            '<ButtonRelease-1>',
-            self.update_compression_force_label
-        )
-        # Лейбл силы сжатия
-        self.compression_force_label = CTk.CTkLabel(
-            self,
-            text='Сила сжатия:\n\nСтандартная',
-            font=("Arial", 20, "bold")
-        )
-        self.compression_force_label.grid(
-            row=3,
-            column=0,
-            columnspan=3,
-            pady=(10, 0)
+            pady=(20, 20)
         )
 
+        self.rb_force_1 = CTk.CTkRadioButton(
+            master=self.settings_frame,
+            variable=self.radio_var,
+            value=1,
+            text='Допечатная'
+        )
+        self.rb_force_1.grid(
+            row=0,
+            column=2,
+        )
+        self.rb_force_2 = CTk.CTkRadioButton(
+            master=self.settings_frame,
+            variable=self.radio_var,
+            value=2,
+            text='Печать'
+        )
+        self.rb_force_2.grid(
+            row=0,
+            column=3,
+            padx=(20, 0),
+        )
+        self.rb_force_3 = CTk.CTkRadioButton(
+            master=self.settings_frame,
+            variable=self.radio_var,
+            value=3,
+            text='На почту'
+        )
+        self.rb_force_3.grid(
+            row=0,
+            column=4,
+        )
+        self.rb_force_4 = CTk.CTkRadioButton(
+            master=self.settings_frame,
+            variable=self.radio_var,
+            value=4,
+            text='Максимум'
+        )
+        self.rb_force_4.grid(
+            row=0,
+            column=6,
+        )
         # кнопка сжатия
         self.compress_button = CTk.CTkButton(
             master=self.settings_frame,
@@ -109,8 +131,10 @@ class App(CTk.CTk):
         )
         self.compress_button.grid(
             row=4,
-            column=1,
-            pady=60,
+            column=2,
+            columnspan=3,
+            padx=(10, 50),
+            pady=100,
             sticky='ew'
         )
         self.toplevel_window = None
@@ -138,9 +162,9 @@ class App(CTk.CTk):
             self.entry_file.configure(state='readonly')
 
     def get_compression_force_name(self):
-        """Добавляет название для лейбла."""
+        """Добавляет название в файл."""
 
-        force = self.compression_force_slider.get()
+        force = self. radio_var.get()
         if force == 0:
             return "стандартная"
         elif force == 1:
@@ -151,31 +175,6 @@ class App(CTk.CTk):
             return "на_почту"
         elif force == 4:
             return "максимальное_сжатие"
-
-    def update_compression_force_label(self, event):
-        """Функция обновления значений слайдера."""
-
-        compression_force = int(self.compression_force_slider.get())
-        if compression_force == 0:
-            self.compression_force_label.configure(
-                text='Сила сжатия:\n\nСтандартная')
-
-        elif compression_force == 1:
-            self.compression_force_label.configure(
-                text='Сила сжатия:\n\nДопечатная')
-        elif compression_force == 2:
-            self.compression_force_label.configure(
-                text='Сила сжатия:\n\nПечать')
-        elif compression_force == 3:
-            self.compression_force_label.configure(
-                text='Сила сжатия:\n\nНа почту')
-        elif compression_force == 4:
-            self.compression_force_label.configure(
-                text='Сила сжатия:\n\nМаксимальное сжатие')
-
-    def close_messagebox(self):
-        if self.toplevel_window is not None:
-            self.toplevel_window.destroy()
 
     def compress_file(self):
         """Функция сжатия файла."""
@@ -217,8 +216,9 @@ class App(CTk.CTk):
         try:
             # Создаем объект StringIO для перехвата вывода консоли
             self.compress_button.configure(text="Подождите...")
-            self.message = messagebox.showinfo("Продолжить?", "Нажмите ОК для продолжения")
-            self.after(3, self.close_messagebox)
+            self.message = messagebox.showinfo(
+                "Продолжить?", "Нажмите ОК для продолжения"
+            )
             console_output = io.StringIO()
             # Сохраняем текущий вывод консоли
             sys.stdout = console_output
@@ -226,7 +226,7 @@ class App(CTk.CTk):
             # Вызываем compress функцию
             compress(input_file,
                      output_file,
-                     power=int(self.compression_force_slider.get()))
+                     power=int(self.radio_var.get()))
 
             # Получаем вывод консоли в виде строки
             console_output_str = console_output.getvalue()
