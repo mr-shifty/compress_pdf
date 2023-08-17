@@ -2,6 +2,7 @@ import os
 import customtkinter as CTk
 from pdf_compressor import compress
 from tkinter import messagebox
+import logging
 
 
 class App(CTk.CTk):
@@ -109,6 +110,12 @@ class App(CTk.CTk):
         )
         self.toplevel_window = None
 
+        logging.basicConfig(
+            level=logging.ERROR,
+            filename="error_log.txt",
+            format="%(asctime)s - %(levelname)s - %(message)s"
+        )
+
     def browse_file(self):
         """Функция выбора файла."""
 
@@ -170,6 +177,14 @@ class App(CTk.CTk):
             file_extension
         )
 
+        if os.path.exists(output_file):
+            response = messagebox.askyesno(
+                "Файл уже существует",
+                "Файл сжатия уже существует. Перезаписать?"
+            )
+            if not response:
+                return
+
         try:
             compress(input_file,
                      output_file,
@@ -179,6 +194,7 @@ class App(CTk.CTk):
             messagebox.showerror(
                 "Ошибка", f"Произошла ошибка при сжатии файла: {str(e)}"
             )
+            logging.error(f"Ошибка при сжатии файла: {str(e)}", exc_info=True)
 
 
 def main():
