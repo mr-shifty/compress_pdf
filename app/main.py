@@ -4,6 +4,7 @@ import mimetypes
 import os
 import sys
 from tkinter import messagebox
+import time
 
 import customtkinter as CTk
 from pdf_compressor import compress
@@ -172,11 +173,14 @@ class App(CTk.CTk):
             self.compression_force_label.configure(
                 text='Сила сжатия:\n\nМаксимальное сжатие')
 
+    def close_messagebox(self):
+        if self.toplevel_window is not None:
+            self.toplevel_window.destroy()
+
     def compress_file(self):
         """Функция сжатия файла."""
 
         input_file = str(self.entry_file.get())
-        self.compress_button.configure(text="Подождите...")
 
         if not input_file:
             messagebox.showerror("Ошибка", "Выберите файл для сжатия.")
@@ -212,6 +216,9 @@ class App(CTk.CTk):
 
         try:
             # Создаем объект StringIO для перехвата вывода консоли
+            self.compress_button.configure(text="Подождите...")
+            self.message = messagebox.showinfo("Продолжить?", "Нажмите ОК для продолжения")
+            self.after(3, self.close_messagebox)
             console_output = io.StringIO()
             # Сохраняем текущий вывод консоли
             sys.stdout = console_output
