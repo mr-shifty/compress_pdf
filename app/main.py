@@ -1,8 +1,11 @@
+import io
+import sys
 import os
 import customtkinter as CTk
 from pdf_compressor import compress
 from tkinter import messagebox
 import logging
+import mimetypes
 
 
 class App(CTk.CTk):
@@ -161,10 +164,34 @@ class App(CTk.CTk):
             self.compression_force_label.configure(
                 text='Сила сжатия:\n\nМаксимальное сжатие')
 
+    def browse_file(self):
+        """Функция выбора файла."""
+        filename = CTk.filedialog.askopenfilename()
+
+        if filename:
+            mime_type, _ = mimetypes.guess_type(filename)
+            if mime_type != 'application/pdf':
+                messagebox.showerror("Ошибка", "Выбранный файл не является PDF.")
+                return
+
+            self.entry_file.configure(state='normal')
+            self.entry_file.delete(0, 'end')
+            self.entry_file.insert(0, filename)
+            self.entry_file.configure(state='readonly')
+
     def compress_file(self):
         """Функция сжатия файла."""
 
         input_file = str(self.entry_file.get())
+
+        if not input_file:
+            messagebox.showerror("Ошибка", "Выберите файл для сжатия.")
+            return
+
+        mime_type, _ = mimetypes.guess_type(input_file)
+        if mime_type != 'application/pdf':
+            messagebox.showerror("Ошибка", "Выбранный файл не является PDF.")
+            return
 
         if not input_file:
             messagebox.showerror("Ошибка", "Выберите файл для сжатия.")
@@ -186,14 +213,29 @@ class App(CTk.CTk):
                 return
 
         try:
+            # Создаем объект StringIO для перехвата вывода консоли
+            console_output = io.StringIO()
+            # Сохраняем текущий вывод консоли
+            sys.stdout = console_output
+
+            # Вызываем compress функцию
             compress(input_file,
                      output_file,
                      power=int(self.compression_force_slider.get()))
-            messagebox.showinfo("Успех", "Файл успешно сжат.")
+
+            # Получаем вывод консоли в виде строки
+            console_output_str = console_output.getvalue()
+            
+            # Возвращаем вывод консоли в стандартное состояние
+            sys.stdout = sys.__stdout__
+
+            # Показываем messagebox и добавляем вывод консоли в него
+            messagebox.showinfo("Успех", f"Файл успешно сжат.\n\nИтого:\n{console_output_str}")
         except Exception as e:
-            messagebox.showerror(
-                "Ошибка", f"Произошла ошибка при сжатии файла: {str(e)}"
-            )
+            # То же самое для случая ошибки
+            console_output_str = console_output.getvalue()
+            sys.stdout = sys.__stdout__
+            messagebox.showerror("Ошибка", f"Произошла ошибка при сжатии файла: {str(e)}\n\nВывод консоли:\n{console_output_str}")
             logging.error(f"Ошибка при сжатии файла: {str(e)}", exc_info=True)
 
 
