@@ -1,10 +1,8 @@
-from typing import Union, Tuple, Optional
+from typing import Optional, Tuple, Union
 
-from .widgets import CTkLabel
-from .widgets import CTkEntry
-from .widgets import CTkButton
-from .widgets.theme import ThemeManager
 from .ctk_toplevel import CTkToplevel
+from .widgets import CTkButton, CTkEntry, CTkLabel
+from .widgets.theme import ThemeManager
 
 
 class CTkInputDialog(CTkToplevel):

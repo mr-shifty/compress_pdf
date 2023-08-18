@@ -1,5 +1,5 @@
-import tkinter
 import sys
+import tkinter
 from typing import Callable
 
 
@@ -135,11 +135,9 @@ class ScalingTracker:
                 #     DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = 18,
                 #     DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = 34
                 # }
-
                 # ctypes.windll.user32.SetProcessDpiAwarenessContext(34)  # Non client area scaling at runtime (titlebar)
                 # does not work with resizable(False, False), window starts growing on monitor with different scaling (weird tkinter bug...)
                 # ctypes.windll.user32.EnableNonClientDpiScaling(hwnd) does not work for some reason (tested on Windows 11)
-
                 # It's too bad, that these Windows API methods don't work properly with tkinter. But I tested days with multiple monitor setups,
                 # and I don't think there is anything left to do. So this is the best option at the moment:
 
@@ -154,7 +152,7 @@ class ScalingTracker:
                 return 1  # scaling works automatically on macOS
 
             elif sys.platform.startswith("win"):
-                from ctypes import windll, pointer, wintypes
+                from ctypes import pointer, windll, wintypes
 
                 DPI100pc = 96  # DPI 96 is 100% scaling
                 DPI_type = 0  # MDT_EFFECTIVE_DPI = 0, MDT_ANGULAR_DPI = 1, MDT_RAW_DPI = 2

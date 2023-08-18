@@ -1,6 +1,6 @@
-import tkinter
 import sys
-from typing import Union, Tuple
+import tkinter
+from typing import Tuple, Union
 
 
 class CTkCanvas(tkinter.Canvas):

@@ -1,4 +1,5 @@
-from typing import Tuple, Dict, Callable, List
+from typing import Callable, Dict, List, Tuple
+
 try:
     from PIL import Image, ImageTk
 except ImportError:

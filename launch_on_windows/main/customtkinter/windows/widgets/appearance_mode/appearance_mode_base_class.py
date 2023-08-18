@@ -1,4 +1,4 @@
-from typing import Union, Tuple, List
+from typing import List, Tuple, Union
 
 from .appearance_mode_tracker import AppearanceModeTracker
 

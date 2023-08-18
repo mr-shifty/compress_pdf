@@ -1,16 +1,17 @@
-import tkinter
-from distutils.version import StrictVersion as Version
-import sys
+import ctypes
 import os
 import platform
-import ctypes
-from typing import Union, Tuple, Optional
+import sys
+import tkinter
+from distutils.version import StrictVersion as Version
+from typing import Optional, Tuple, Union
 
-from .widgets.theme import ThemeManager
-from .widgets.scaling import CTkScalingBaseClass
+from customtkinter.windows.widgets.utility.utility_functions import (
+    check_kwargs_empty, pop_from_dict_by_set)
+
 from .widgets.appearance_mode import CTkAppearanceModeBaseClass
-
-from customtkinter.windows.widgets.utility.utility_functions import pop_from_dict_by_set, check_kwargs_empty
+from .widgets.scaling import CTkScalingBaseClass
+from .widgets.theme import ThemeManager
 
 
 class CTkToplevel(tkinter.Toplevel, CTkAppearanceModeBaseClass, CTkScalingBaseClass):

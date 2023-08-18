@@ -1,10 +1,9 @@
 import sys
-from typing import Union, Tuple, Callable, Optional
+from typing import Callable, Optional, Tuple, Union
 
-from .core_rendering import CTkCanvas
-from .theme import ThemeManager
-from .core_rendering import DrawEngine
+from .core_rendering import CTkCanvas, DrawEngine
 from .core_widget_classes import CTkBaseClass
+from .theme import ThemeManager
 
 
 class CTkScrollbar(CTkBaseClass):

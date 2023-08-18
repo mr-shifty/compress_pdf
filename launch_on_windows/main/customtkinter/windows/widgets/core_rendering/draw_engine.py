@@ -1,8 +1,9 @@
 from __future__ import annotations
-import sys
+
 import math
+import sys
 import tkinter
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from ..core_rendering import CTkCanvas

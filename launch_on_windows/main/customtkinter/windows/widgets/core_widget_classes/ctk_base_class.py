@@ -1,8 +1,8 @@
 import sys
-import warnings
 import tkinter
 import tkinter.ttk as ttk
-from typing import Union, Callable, Tuple
+import warnings
+from typing import Callable, Tuple, Union
 
 try:
     from typing import TypedDict
@@ -10,14 +10,12 @@ except ImportError:
     from typing_extensions import TypedDict
 
 from .... import windows  # import windows for isinstance checks
-
-from ..theme import ThemeManager
+from ..appearance_mode import CTkAppearanceModeBaseClass
 from ..font import CTkFont
 from ..image import CTkImage
-from ..appearance_mode import CTkAppearanceModeBaseClass
 from ..scaling import CTkScalingBaseClass
-
-from ..utility import pop_from_dict_by_set, check_kwargs_empty
+from ..theme import ThemeManager
+from ..utility import check_kwargs_empty, pop_from_dict_by_set
 
 
 class CTkBaseClass(tkinter.Frame, CTkAppearanceModeBaseClass, CTkScalingBaseClass):

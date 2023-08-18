@@ -1,18 +1,20 @@
-from typing import Union, Tuple, Optional
+from typing import Optional, Tuple, Union
+
 try:
     from typing import Literal
 except ImportError:
     from typing_extensions import Literal
-import tkinter
-import sys
 
-from .ctk_frame import CTkFrame
-from .ctk_scrollbar import CTkScrollbar
+import sys
+import tkinter
+
 from .appearance_mode import CTkAppearanceModeBaseClass
-from .scaling import CTkScalingBaseClass
 from .core_widget_classes import CTkBaseClass
+from .ctk_frame import CTkFrame
 from .ctk_label import CTkLabel
+from .ctk_scrollbar import CTkScrollbar
 from .font import CTkFont
+from .scaling import CTkScalingBaseClass
 from .theme import ThemeManager
 
 

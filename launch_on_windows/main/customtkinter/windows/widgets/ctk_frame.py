@@ -1,9 +1,8 @@
-from typing import Union, Tuple, List, Optional
+from typing import List, Optional, Tuple, Union
 
-from .core_rendering import CTkCanvas
-from .theme import ThemeManager
-from .core_rendering import DrawEngine
+from .core_rendering import CTkCanvas, DrawEngine
 from .core_widget_classes import CTkBaseClass
+from .theme import ThemeManager
 
 
 class CTkFrame(CTkBaseClass):

@@ -1,13 +1,14 @@
-from typing import Union, Tuple
 import copy
 import re
+from typing import Tuple, Union
+
 try:
     from typing import Literal
 except ImportError:
     from typing_extensions import Literal
 
-from .scaling_tracker import ScalingTracker
 from ..font import CTkFont
+from .scaling_tracker import ScalingTracker
 
 
 class CTkScalingBaseClass:

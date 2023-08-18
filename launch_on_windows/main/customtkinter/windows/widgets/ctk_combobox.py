@@ -1,14 +1,12 @@
-import tkinter
-import sys
 import copy
-from typing import Union, Tuple, Callable, List, Optional
+import sys
+import tkinter
+from typing import Callable, List, Optional, Tuple, Union
 
-from .core_widget_classes import DropdownMenu
-from .core_rendering import CTkCanvas
-from .theme import ThemeManager
-from .core_rendering import DrawEngine
-from .core_widget_classes import CTkBaseClass
+from .core_rendering import CTkCanvas, DrawEngine
+from .core_widget_classes import CTkBaseClass, DropdownMenu
 from .font import CTkFont
+from .theme import ThemeManager
 
 
 class CTkComboBox(CTkBaseClass):

@@ -1,15 +1,16 @@
-import tkinter
 import copy
-from typing import Union, Tuple, List, Dict, Callable, Optional
+import tkinter
+from typing import Callable, Dict, List, Optional, Tuple, Union
+
 try:
     from typing import Literal
 except ImportError:
     from typing_extensions import Literal
 
-from .theme import ThemeManager
-from .font import CTkFont
 from .ctk_button import CTkButton
 from .ctk_frame import CTkFrame
+from .font import CTkFont
+from .theme import ThemeManager
 
 
 class CTkSegmentedButton(CTkFrame):

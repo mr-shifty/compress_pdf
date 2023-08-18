@@ -1,6 +1,7 @@
-from tkinter.font import Font
 import copy
-from typing import List, Callable, Tuple, Optional
+from tkinter.font import Font
+from typing import Callable, List, Optional, Tuple
+
 try:
     from typing import Literal
 except ImportError:
