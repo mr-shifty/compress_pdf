@@ -137,7 +137,14 @@ class App(CTk.CTk):
             pady=100,
             sticky='ew'
         )
-        self.toplevel_window = None
+        self.author_label = CTk.CTkLabel(
+            master=self,
+            text='Автор: Мельников Павел\nGitHub: mr-shifty'
+        )
+        self.author_label.grid(
+            row=0,
+            column=0
+        )
 
         logging.basicConfig(
             level=logging.ERROR,
